@@ -1,0 +1,89 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{{\it ZZ. }{#1}\\
+{\begin{proof}[Beweis] {#2} \end{proof}}}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+ \huge \bf Lösung zu Bonusblatt 2
+\end{center}
+
+\loes{1}{
+\teil{a}{
+    \bew{Für alle A gibt es ein lokales Minimum.}{
+        Da alle $n^2$ Elemente paarweise verschieden sind, gibt es ein absolutes Minimum. Dies ist kleiner als alle anderen Elemente in A also insbesondere auch kleiner als seine Nachbarn und damit ein lokales Minimum.
+    }
+}
+\teil{b}{
+\begin{algorithm}
+    \floatname{algorithm}{LokalesMinimum(A, m)}
+    \caption{~}
+    {\bf Input: }{$n \times m$ Array $A$ mit paarweise verschiedenen Elementen (0-basiert), Anzahl der Spalten $m$}\\
+    {\bf Output: }{Ein lokales Minimum in $A$}
+    \begin{algorithmic}[1]
+        \STATE $midColumn \leftarrow \lfloor \frac{m}{2} \rfloor$
+        \STATE $min \leftarrow $ Index des Minimum in Spalte $midColumn$
+        \IF{$(A[min][midColumn - 1] > A[min][midColumn]) \wedge (A[min][midColumn + 1] > A[min][midColumn])$}
+        \RETURN $A[min][midColumn]$
+        \ENDIF
+        \IF{$A[min][midColumn - 1] < A[min][midColumn + 1]$}
+            \STATE $B \leftarrow$ Teilarray von A mit Spalten $0$ bis exklusive $midColumn$
+            \STATE $newM \leftarrow midColumn$
+        \ELSE
+            \STATE $B \leftarrow$ Teilarray von A mit Spalten $midColumn + 1$ bis $m - 1$
+            \STATE $newM \leftarrow m - midColumn - 1$
+        \ENDIF
+        \RETURN $LokalesMinimum(B, newM)$
+    \end{algorithmic}
+\end{algorithm}}
+Dabei sei ein Element auserhalb des Arrays (z.B. $A[0][-1]$) immer größer als Elemente im Array.
+}
+}
+
+
+\end{document}

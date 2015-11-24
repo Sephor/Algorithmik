@@ -1,0 +1,99 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{{\it ZZ. }{#1}\\
+{\begin{proof}[Beweis] {#2} \end{proof}}}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+ \huge \bf Lösung zu Übungsblatt XX
+\end{center}
+
+\loes{2}{
+\teil{a}{
+    $I(\sigma)=\{(1,3),(1,7),(3,7),(4,5),(4,7),(4,8),(5,7),(5,8),(6,7),(6,8)\}$
+}
+\teil{b}{
+    $\sigma=n,n-1,n-2,...,1$ hat $\frac{(n-1)(n-2)}{2}$ Fehlstände
+}
+\teil{c}{
+    \bew{
+        $I(\sigma)\neq\emptyset\Rightarrow\exists 1 \leq i < n:(i,i+1)\in I(\sigma)$
+    }
+    {
+        Durch widerspruch:\\
+        WA: $I(\sigma)\neq\emptyset\wedge\neg\exists 1 \leq i < n:(i,i+1)\in I(\sigma)$
+        \begin{equation}
+            \begin{split}
+                \Rightarrow &\forall 1 \leq i < n:(i,i+1)\notin I(\sigma)\\
+                \Rightarrow &\forall 1 \leq i < n:\sigma(i) \leq \sigma(i+1)\\
+                \Rightarrow &\forall 1\leq i < j < n:\sigma(i) \leq \sigma(j)\\
+                \Rightarrow &\sigma = \{1,2,...,n\}\\
+                \Rightarrow &I(\sigma)=\emptyset\\
+                & \hookrightarrow $Widerspruch zu WA$
+            \end{split}
+        \end{equation}
+        Da WA zum Widerspruch führ muss {\it ZZ} gelten.
+    }
+}
+\teil{d}{
+    \bew{
+        Insertsort mit $A=[\sigma(1),\sigma(2),...,\sigma(n)]$ hat laufzeit $\mathcal{O}(n+|I(\sigma)|)$
+    }
+    {
+        \\Beweis Induktiv:\\
+        IA: $I(\sigma) = \emptyset \Rightarrow$ Es gibt keine Fehlstände. Das heißt A ist schon sortiert und die Laufzeit von Insertsort ist $T=c_1n+c_2 \in \mathcal{O}(n)$\\
+        IV: {\it ZZ} gelte für ein beliebiges $K=I(\sigma)$.\\
+        IS: Sei $K'=K \cup \{(k,l)\}$ mit $1\leq k<l\leq n$.\\
+        Falls $(k,l) \in K$ ist $K'=K$ und die Laufzeit verändert sich nicht.\\
+        Falls $(k,l) \notin K$ verändert sich die Iterationszahl des for-Loops nicht. Die des while-Loops veränders sich auch nicht für $i< l$, da alle Vergleiche gleih ausfallen wie bei $K$. ......
+    }
+}
+}
+
+
+\end{document}

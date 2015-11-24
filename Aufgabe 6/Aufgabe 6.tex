@@ -1,0 +1,121 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+\begin{equation}
+\begin{split}
+{#1}
+\end{split}
+\end{equation}
+}
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 6
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{2}{
+\teil{a}{
+    \bew{Sort ist Korrekt (für $j > i \geq 0$)}{
+        Seien $x$ und $y$ beliebige Elemente in $A$ mit $i \leq ind(x) \leq j$ und $i \leq ind(y) \leq j$, wobei $ind(x)$ der Index von $x$ in $A$ ist.\\
+        Zeige: Falls $x < y$ dann ist nach Ausführung von sort $ind(x) < ind(y)$ ($\Leftrightarrow A$ ist sortiert von $i$ bis $j$). (I)\\
+        {\bf Induktiv über $j-i$:}\\
+        {\bf Induktions Vorraussetzung:} Falls $j-i = 1$ dann ist $j = i + 1$ und der erste \textbf{if}-Block wird betreten. Wegen den Bedingungen oben ist entweder $A[i] = x \wedge A[j] = y$ oder $A[j] = x \wedge A[i] = y$. Für den ersten Fall ist $A[j] < A[i] = False$, nichts wird getauscht und $ind(x) < ind(y)$ gilt. Für den zweiten Fall ist $A[j] < A[i] = True$, $A[i]$ und $A[j]$ werden getauscht und $ind(x) < ind(y)$ gilt.\\
+        Dannach wird unmittelbar returnt, (I) gilt also für $j-i=1$.\\
+        {\bf Induktions Behauptung:} (I) gilt für $j-i \leq n $, $n \geq 1$ beliebig.\\
+        {\bf Induktions Schritt:} Zeige (I) gilt für $j-i \leq n \Rightarrow$ (I) gilt für $j-i \leq n+1$.\\
+        Sei $j-i=n+1$.\\
+        Da $n \geq 1$ gilt $j = i+1$ nicht und der \textbf{if}-Block wird nicht betreten. $l$ wird auf $j-i+1=n+1$ gesetzt. Das heißt $\lfloor \frac{l}{3} \rfloor > 1$ also ist $\lceil j-\frac{l}{3}\rceil - i \leq n$. Der Aufruf in Zeile 8 sortiert die Elemente $i$ bis inklusive $\lceil j-\frac{l}{3}\rceil$.\\
+        Es gilt auch $j-\lfloor i + \frac{l}{3} \rfloor \leq n$, also sortiert Zeile 9 $\lfloor i + \frac{l}{3} \rfloor$ bis $i$. Das Teilarray von $i$ bis exklusive $\lfloor i + \frac{l}{3} \rfloor$ ist also duch 8 sortiert und $\lfloor i + \frac{l}{3} \rfloor$ bis $j$ durch 9. Insbesondere gilt auch das alle Elemente im Teilarray $j-\lfloor i + \frac{l}{3} \rfloor$ bis $j$ größer sind als alle anderen.\\
+        Mit Zeile 10 wird wieder $i$ bis $j-\lfloor i + \frac{l}{3} \rfloor$ sortiert, das heißt das gesamte Array ist sortiert.
+    }
+}
+\teil{b}{
+    Für $j-i=n$ lässt sich die Laufzeit als
+    \begin{equation}
+        \begin{split}
+            T(1) &= c\\
+            T(n) &= 3T(\frac{2n}{3}) + c
+        \end{split}
+    \end{equation}
+    Mit dem Mastertheorem Fall a erhällt man:
+    \spliteq{
+        & \log_ba > 2\\
+        & f(n) = c \in \mathcal{O}(n^2)\\
+        \Rightarrow & T(n) \in \Theta(n^{\log_ba})\\
+        \Leftrightarrow & T(n) \in \Theta(n^{\log_{1,5}{3}})
+    }
+}
+}
+
+\loes{3}{
+\teil{a}{
+    \bew{Genericsort ist korrekt}{
+        Für $x$, $y$ beiebige ganze Dezimalzahlen mit $k$ (beliebig, fest) stellen gilt
+        \begin{equation}
+            x \neq y \Rightarrow \exists 1 \leq j \leq k: x_j \neq y_j
+        \end{equation}
+        Für das kleinste dieser $j$ gilt dann $x_j < y_j \Rightarrow: x < y$. Da die Zahlen in absteigender Reihenfolge sortiert werden und das Sortierverfahren $X$ stabil ist, steht $x \in A$ genau dann vor $x \neq y \in A$ wenn für die kleinste Stelle $j$ an der sich $x$ und $y$ unterscheiden $x_j < y_j$ gilt.
+    }
+}
+\teil{b}{
+    Nach der ersten for-Schleife stehen in $B$ am index $i$ die Anzahl der Vorkommen von $i$ in $A$. Nach der zweiten schleife steht am Index $i$ Anzahl der Vorkommen aller $x \leq i$ in $A$ minus eins. Das is Äquivalent zu dem jeweils letzten Index im sortierten array, der den wert $i$ hat.\\
+    Der Algorithmus sortiert auch korrekt (aber nicht stabil) wenn die Schleife aufsteigend läuft weil nur die reihenfolge geändert wird wann welcher Wert in $C$ geschrieben wird, aber trotzdem Die gleichen Werte an die entsprechenden Stellen geschrieben werden.
+}
+\teil{c}{
+    Anmerkung: Es is schwierig die Reienfolge der elemente von der der Schlüssel zu unterscheiden, wenn die Elemente selbst die Schlüssel sind.
+    \bew{Linearsort ist stabil}{
+
+    }
+}
+}
+
+
+\end{document}

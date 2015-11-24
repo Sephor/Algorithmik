@@ -1,0 +1,192 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}\vspace{0.5cm}}
+
+\theoremstyle{remark}
+\newtheorem*{korrektheit1}{Zz. Korrektheit Min}
+\newtheorem*{korrektheit2}{Zz. Korrektheit Teil 1}
+\newtheorem*{vergleichzahl}{Zz.}
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+ \huge \bf Lösung zu Übungsblatt 4
+\end{center}
+
+
+\loes{1}{
+    \begin{algorithm}
+        \floatname{algorithm}{Min(A, l, r)}
+        \caption{~}
+        {\bf Input: }{Array A, indezes l, r}\\
+        {\bf Output: }{index eines lokalen Minimum}
+        \begin{algorithmic}[1]
+            \STATE $i \leftarrow l + \lfloor \frac{r - l + 1}{2} \rfloor$
+            \STATE $j \leftarrow i + 1$
+            \IF{$j > r$}
+                \RETURN $i$
+            \ELSE
+                \IF{$A[i] < A[j]$}
+                    \RETURN $Min(A, l, i)$
+                \ELSE
+                    \RETURN $Min(A, j, r)$
+                \ENDIF
+            \ENDIF
+        \end{algorithmic}
+    \end{algorithm}\\
+    Zu begin wird Min(A, 0, n-1) aufgerufen, A ist 0-basiert. Auserdem nehme ich an, dass $n>0$.\\\\
+    \bf Korrektheit:\\
+    \begin{korrektheit1}
+        Min(A, l, r) gibt Index eines lokalen Minimum für das Teilarray $A[l,...,r]$ zurück.
+    \end{korrektheit1}
+    \begin{proof}[Beweis] Über strukturelle Induktion:\\
+        IV: Zeige Korrektheit gilt für $r - l = 0$:\\
+        Wenn $r - l=0$ dann wird $i$ auf $l$ gesetzt und $j$ auf $l+1$. Da $j>r$ gilt wird in Zeile 4 $i=l$ zurückgegeben. $A[l]$ hat keine Nachbarn in $A[l,...,r]$, ist also ein lokales Minimum.\\
+        IA: Korrektheit gilt für $1 \leq r-l \leq k$\\
+        IS: Zeige Korrektheit gilt für $1 \leq r-l \leq k \Rightarrow $ Korrektheit gilt für $r-l \leq 2k$:\\
+        Sei $k < r-l \leq 2k$.\\
+        Zu begin wird $i$ auf $l+\lfloor \frac{r - l + 1}{2} \rfloor$ gesetzt und $j$ auf $i+1$. Da $r-l \leq 2k$ ist $i-l \leq k$ und $r-j \leq k$. Auserdem ist $j$ auf jeden fall kleiner oder gleich r, weshalb wir in Zeile 5 in den else Block gehen. Es wird also entweder Min(A, l, i) zurückgegeben wenn $A[i] < A[j]$ (I) oder Min(A, j, r) wenn $A[i] > A[j]$ (II).\\
+        Fall I: $x = Min(A, l, i)$ ist wegen der Induktionsannahme der Index eines lokalen Minimum des Teilarrays $A[l,...,i]$, da $i-l \leq k$. Falls nun $x \ne i$ ist, dann ist $x$ offensichtlich auch ein lokales Minimum des Teilarrays $A[l,...,r]$. Falls $x = i$, dann hat $A[x]$ keinen oder einen größeren linken Nachbar. Da $A[i] < A[j]$ ist auch der rechte Nachbar größer und i ist der Index eines lokalen Minimum in $A[l,...,r]$.\\
+        Fall II verhält sich analog zu Fall I (da $r-j \leq k$) nur, dass der linke statt dem rechten Nachbarn betrachtet werden muss und andersherum.\\
+        Mit IV, IA und IS gilt also die Korrektheit für alle $r-l \geq 0$. Insbesonder ist der Algorithmus korrekt für $l=0$ und $r=n-1$
+    \end{proof}
+    {}\bf Laufzeit:}\\
+    Für die Laufzeit gilt:\\
+    $T(1)=c_1$, da Zeile 1 bis 4 jeweils eine Konstante Laufzeit haben.\\
+    $T(n)=T(\lceil \frac{n}{2} \rceil) + c_2$, da das Teilarray jedes Mal halbiert wird.\\
+    Mit dem fall b) des Master-Theorem lässt sich die Laufzeit abschätzen als $T(n) \in \Theta (\log n)$
+}\\\\
+\loes{2}{
+    \begin{algorithm}
+        \floatname{algorithm}{Dom(A, n)}
+        \caption{~}
+        {\bf Input: }{Array A, länge des Arrays n}\\
+        {\bf Output: }{index eines dominierenden Elements, falls vorhanden}
+        \begin{algorithmic}[1]
+            \STATE $candidate \leftarrow 0$
+            \STATE initialisiere Array $Deleted$ der länge $n$ mit False
+            \FOR{i:=0 \TO n-1} \DO
+                \IF{not $eq(i, candidate)$}
+                    \STATE $Deleted[i] \leftarrow$ True
+                    \STATE $Deleted[candidate] \leftarrow$ True
+                    \WHILE {$Deleted[candidate] \wedge candidate < n$}
+                        \STATE $candidate \leftarrow candidate + 1$
+                    \ENDWHILE
+                \ENDIF
+            \ENDFOR
+            \STATE $count \leftarrow 0$
+            \FOR{i:=0 \TO n-1} \DO
+                \IF {$eq(i, candidate)$}
+                    \STATE $count \leftarrow count + 1$
+                \ENDIF
+            \ENDFOR
+            \IF {$count > \frac{n}{2}$}
+                \RETURN $candidate$
+            \ENDIF
+        \end{algorithmic}
+    \end{algorithm}\\
+    $eq(i, j)$ vergleicht A[i] mit A[j]. Zeilen 1 bis 11 nenne ich im Folgendem Teil 1, Zeilen 12 bis 20 nenne ich Teil 2.\\
+    Teil 1 findet den Index eines dominierenden Elementes falls es ein solches gibt, oder ein beliebigen anderen Index sonst. Der Kandidat wird in $candidate$ gespeichert. Teil 2 prüft ob candidate tatsächlich ein dominierendes Element ist.\\
+    {\bf Korrektheit: }\\
+    Ich werde zunächst die Korrektheit von Teil 1 zeigen.\\
+    \begin{korrektheit2}
+        Falls A ein dominierendes Element hat, dann ist am ende von Teil 1 der Index von einem der dominierenden Elemente in $candidate$ gespeichert.
+    \end{korrektheit2}
+    \begin{proof}[Beweis]
+        Sei $A$ ein beliebiges Array mit einem dominierenden Element $d$.\\
+        {\it Behauptung: } Sei $0 \leq i < j < n$ und $A'$ das Array A ohne die elemente $A[i]$ und $A[j]$. Falls $eq(i, j) =$ False, dann ist $d$ dominierendes Element in $A'$.
+
+        \begin{equation}
+            \begin{split}
+                eq(i, j) = False & \Rightarrow (A[i] = d \wedge A[j] \neq d) \vee (A[j] = d \wedge A[i] \neq d) \vee (A[i] \neq d \wedge A[j] \neq d)\\
+                & \Rightarrow (|A'|_d \geq |A|_d - 1) \wedge (|A'| = |A| - 2)\\
+                &$Da $d$ dominierendes Element in A ist gilt $\frac{|A|_d}{|A|} > \frac{1}{2}\\
+                & \Rightarrow \frac{|A'|_d}{|A'|} \geq \frac{|A|_d - 1}{|A| - 2} \geq \frac{|A|_d}{|A|} > \frac{1}{2} \\
+                &\Rightarrow d$ ist dominierendes Element in$ A'
+            \end{split}
+        \end{equation}
+
+        Das Array $Deleted$ markiert die Indezes gelöschter Objekte. Zeile 7 bis 9 stellt sicher, dass nach Zeile 9 $candidate$ auf dem kleinsten nicht markierten Index steht. Insbesondere gilt auch, dass nach Zeile 11, dass $candidate$ auf dem ersten nicht markierten Index steht. Auserdem werden Indizees nur paarweise markiert (wenn Zeile 5 erreicht wird, dann wird auch Zeile 6 erreicht) und es werden nur Paare mit ungleichen werten markiert (Zeile 4).\\
+        {\it Behauptung: } Nach ablauf von Teil 1 gilt:
+        $$\neg \exists 0 \leq i < n : Deleted[i] \wedge A[i] \neq A[candidate]$$
+        Es muss $candidate < i$ gelten, da $candidate$ immer der kleinste nicht markierte Index ist. Wenn es jetzt ein $i$ wie oben gäbe, dann heißt das, dass beim Schleifendurchlauf $i$, $A[i] = A[candidate_i]$ galt, wobei $candidate_i$ der $candidate$ beim Schleifendurchlauf $i$ ist.\\
+
+        ...unvollständig\\
+
+    \end{proof}
+    {\bf Laufzeit: }\\
+    Der {\bf for} Block von Zeile 13 bis 17 läuft $n$ mal und hat eine konstante laufzeit. Wodurch die laufzeit ein $\Theta(n)$ ist.\\
+    Der {\bf for} Block in Zeile 3 bis 11 läuft $n$ mal. Zeile 8 wird auch höchstens n mal ausgeführt, da dann $candidate \geq n$ ist und der {\bf while} Loop nicht mehr betreten wird. Die Laufzeit des äuseren {\bf for} Loops ein $\Theta(n)$.\\
+    Alle anderen Zeilen haben konstante Laufzeiten, also ist die Gesamtlaufzeit $T \in \Theta(n)$.
+}\\
+\loes{3}{
+a)\\
+Sei $n$ die Anzahl der Vergleiche.\\
+\begin{vergleichzahl}
+    $(\forall A,l \leq m \leq r: n \leq r-l) \wedge (\exists A,l,m,r: n = r-l)$
+\end{vergleichzahl}
+\begin{proof}[Beweis:] Zeige zuerst: $\forall A,l \leq m \leq r: n \leq r-l$\\
+    Sei $A,l,m,r$ mit $l \leq m \leq r$ beliebig fest.\\
+    Initial ist $i=l$ und $j=m+1$. Auserdem gilt $l \leq m \leq r \Rightarrow (r - m ) + (m - l) = (r - l)$. Nach jedem Vergleich wird $i$ oder $j$ inkrementiert. Wenn $i$ $m-l+1$ mal oder $j$ $r-m$ mal inkrementiert wurde, dann bricht die while-Schleife in Zeile 3 ab (weil $l+(m-l+1) = m+1 > m$ und $m+1 + (r -m) = r+1 > r$) und es finden keine Vergleiche mehr statt. Das Heißt im schlimmsten Fall wird $i$ $m-l$ mal und $j$ $r-m$ mal inkrementiert. Es gilt also $n \leq m-l + r-m = r-l$.\\
+    Zeige $\exists A,l,m,r: n = r-l$:\\
+    Wähle $l=0, r=1, m=0, A=[1,0]$. Dann wird $n=1=r-l$ Vergleich ausgeführt.\\
+    Da beide Teilaussagen gelten gilt auch die Konjunktion.
+\end{proof}
+c) Die Verschmelzung von X und Y benötigt bis zu $|X|+|Y|$ viele Vergleiche. Das lässt sich aus dem Beweis in a) ableiten. Nach der $l$-ten Verschmelzung gilt $|A'_l|=\sum_{i=1}^{l}(\frac{n}{k})=l\frac{n}{k}$, wobei $A'_l$ das Verschmolzene Array ist. Die $l$-te Versmelzung benötigt also bis zu $x_l = |A'_{l-1}| + \frac{n}{k} = (l-1)\frac{n}{k} + \frac{n}{k}$ Vergleiche. Für alle k Arrays macht das bis zu
+\begin{equation}
+    \begin{split}
+        \sum_{l=1}^{k}(x_l) = & \sum_{l=1}^{k}((l-1)\frac{n}{k} + \frac{n}{k})\\
+        = & \sum_{l=1}^{k}(l-1)\frac{n}{k} + \sum_{l=1}^{k}\frac{n}{k}\\
+        = & \frac{n}{k}\sum_{l=1}^{k}l-k+\sum_{l=1}^{k}\frac{n}{k}\\
+        = & \frac{nk(k+1)}{k2}+\sum_{l=1}^{k}\frac{n}{k}\\
+        = & \frac{n(k+1)}{2}+\sum_{l=1}^{k}\frac{n}{k}\\
+        \in & \mathcal{O}(nk + \log n) = \mathcal{O}(nk)
+    \end{split}
+\end{equation}
+Vergleiche.\\
+d) Idee:\\
+Für alle geraden $i < k$ verschmelze jeweils $A_i$ mit $A_{i+1}$ zu $A^1_{\frac{i}{2}}$. Verschmelze dann für alle geraden $i \leq \frac{k}{2}$ $A^1_i$ mit $A^1_{i+1}$ zu $A^2_{\frac{i}{2}}$. Wiederhole den Vorgang bis alle Arrays verschmolzen sind. Ich gehe hier davon aus, dass die Indizes $0$-basiert sind.\\
+Die größe der Arrays im $l$-ten Durchgang ist $g = 2^l\frac{n}{k}$. Die Anzahl der Arrays ist $a = \frac{k}{2^l}$. Die Anzahl der Vergleiche im $l$-ten Durchgang ist somit $\sum^{a/2}_{i=1}2g = ag = 2^l\frac{nk}{k2^l} = n$. Die Anzahl der Duchgänge ist $\log(k)$. Die Gesammtzahl der Vergleiche ist also ein $\mathcal{O}(n\log k)$.\\
+
+}
+\end{document}
