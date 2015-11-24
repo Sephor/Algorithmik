@@ -110,10 +110,29 @@ Potsdam\\
     Der Algorithmus sortiert auch korrekt (aber nicht stabil) wenn die Schleife aufsteigend läuft weil nur die reihenfolge geändert wird wann welcher Wert in $C$ geschrieben wird, aber trotzdem Die gleichen Werte an die entsprechenden Stellen geschrieben werden.
 }
 \teil{c}{
-    Anmerkung: Es is schwierig die Reienfolge der elemente von der der Schlüssel zu unterscheiden, wenn die Elemente selbst die Schlüssel sind.
+    Anmerkung: Es is schwierig die Reienfolge der elemente von der der Schlüssel zu unterscheiden, wenn die Elemente selbst die Schlüssel sind.\\\\
     \bew{Linearsort ist stabil}{
-
+        In der dritten Schleife wird ein wert $x$ in $C$ zuerst and die letzte stelle aller $x$ im sortierten array geschrieben.\\
+        Wenn das erste mal der Wert $x$ in $A$ gelesen wird wird er also an die Letzte Stelle aller $x$ in $C$ geschrieben. Der Index an den das nächste $x$ geschrieben wird wird dann um eins verringert. Da die Schleife rückwärts läuft wird also immer das n-letzte $x$ an die n-letzte Stelle der aller $x$ geschrieben. Die reihenfolge bleibt also gleich.
     }
+}
+\teil{d}{
+    \bew{Es gibt im worst case $\Omega(n^2)$ Vertauschungen.}{
+        Wenn für alle $i < \frac{n}{2}$ gilt $A[2i] > A[2i+1]$ dann wird zuerst beim ersten Durchlauf der äuseren Schleife bei jedem zweiten Element getauscht, also werden $\frac{n}{2}$ Vertauschungen vorgenommen. Beim jedem weiteren Durchgang wird jeweils eine Vertauschung weniger vorgenommen. Die Beschriiebene Form lässt sich für alle $l  > 1$ und $n$ herstellen.\\
+        Die gesamtzahl der Vertauschungen ist also $n \frac{n}{2} \in \Omega(n^2)$.
+    }
+}
+\teil{e}{
+    Die Laufzeit von Genericsort mit Bubblesort als Subroutine $X$ ist $T_G(k, n) = kT_{Bubble}(n)$ wobei $T_{Bubble}$ die Laufzeit von Bubblesort ist. $T_G(k, n)$ ist somit ein $\Theta(kn^2)$.
+}
+\teil{f}{
+    Die Lufzeit von Linearsort ist $f_1(n) + f_2(z) + f_3(n) + c$ wobei $f_i$ die Laufzeit für die $i$-te Schleife ist. $f_1$ und $f_3$ sind in $\Theta(n)$, $f_2$ ist in $\Theta(z)$. Damit ist die gesamtlaufzeit $\Theta(n+z)$.\\
+    \bew{Für $z=cn$ gilt die Laufzeit ist in $\matcal{O}(n)$}{
+        Die Laufzeit für $z$ beliebig ist in $\Theta(n+z)$, die Laufzeit für $z=cn$ ist damit in $\Theta(n+cn) = \Theta(n) \cup \mathcal{O}(n)$
+    }
+}
+\teil{g}{
+    Die Laufzeit für Genericsort mit Linearsort als Subroutine ist $T_G(k, n) = kT_{Linear}(n, z)$ mit $z=10$. $T_G(k, n)$ ist also in $\Theta(kn)$.
 }
 }
 
