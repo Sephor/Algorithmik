@@ -85,7 +85,15 @@ Potsdam\\
 }
 \loes{4}{
 \teil{a}{
-    
+    Wähle man wähle $\Phi(i)$ als:\\
+    \spliteq{
+        \Phi(i)= c_i - \lfloor \frac{|A_i|}{2} \rfloor
+    }
+    $c_i$ ist die länge des dynamischen Arrays am \textbf{anfang} der $i$-ten Einfügeoperation. $|A_i|$ ist die länge von $A$ am \textbf{ende} der $i$-ten Einfügeoperation.
+    Da initial $c_i = 0$ und $|A_i| = 1$ gilt $\Phi(0) = 0$. Sei $\Delta \Phi(i) = \Phi(i) - \Phi(i-1)$, dann gilt für die amorisierten Kosten $a_i = t_i + \Delta \Phi(i)$. Wenn man nur nacheinander einfügt bleibt $c_i \geq \lfloor \frac{|A_i|}{2} \rfloor$ und $\Phi(i)$ ist somit immer positivy. Daraus folgt, dass wir die tatsächlichen Kosten abschätzen können mit:\\
+    \spliteq{
+        T(n) = \sum_{i=1}^n t_i \leq \sum_{i=1}^n a_i
+    }
 }
 }
 
