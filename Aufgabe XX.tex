@@ -24,8 +24,16 @@ right=27mm,head=14.5pt}
 {#2}}}
 \newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
 {#2}}}
-\newcommand{\bew}[2]{{\it ZZ. }{#1}\\
-{\begin{proof}[Beweis] {#2} \end{proof}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
 
 
 \begin{document}

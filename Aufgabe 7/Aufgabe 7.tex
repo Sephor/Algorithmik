@@ -1,0 +1,93 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 7
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{3}{
+\teil{a}{
+    Die Amorisierten Kosten seien wie folgt:\\
+    \spliteq{
+        1 & $ für $  0 \rightarrow 1\\
+        2 & $ für $  1 \rightarrow 2\\
+        0 & $ für $  2 \rightarrow 0
+    }
+    Wobei $0 \rightarrow 1$ die Änderung eines Trit von $0$ auf $1$ sei.\\
+    Die Tatsächlichen Kosten der $i$-ten Inkrementierung ergeben sich aus $t_i = e_i+z_i+n_i$. $e_i$ ist die Anzahl der Tritänderung von $0$ auf $1$, $z_i$ von $1$ auf $2$ und $n_i$ von $2$ auf $0$. Mit den oben angegebenen Kosten erhält man für die amorisierten Kosten der $i$-ten Inkrementierung $a_i = 1e_i+2z_z+0n_i$.\\
+    Das Guthaben entspricht immer der Anzahl der $2$en, weil genau dann ein Guthaben hinzugefügt wird wenn eine neue $2$ entsteht, und genau dann ein Guthaben abgezogen wird wenn eine $2$ zur $0$ wird. Es steht also immer mindestens genug Guthaben zu verfügung um alle $2$en zu $0$en zu ändern. Die Gesamtkosten um $n$ mal zu inkrementieren sind damit abschätzbar durch:\\
+    \spliteq{
+        T(n) = \sum_{i=1}^n t_i \leq \sum_{i=1}^n a_i
+    }
+    Bei jeder Inkrementierung wird aber höchstens ein Trit von von $1$ auf $2$ geändert oder ein Trit von $0$ auf $1$. Das heißt $\forall i \leq n: a_i \leq 2$. Für die Gesamtkosten ergibt sich somit $T(n) \leq \sum_{i=1}^n 2 = 2n \in \mathcal{O}(n)$.
+}
+\teil{b}{
+    Die Addition von $11_2$ is Äquivalent zu erst $10_2$ und dann $1_2$ addieren. Die Amorisierten Kosten um $10_2$ zu addieren sind höchstens gleich hoch wie die um $1_2$ zu addieren (man ignoriert einfach die letzte stell und wendet genau das gleiche Verfahren an). Die Kosten das $i$-te mal $3$ zu addieren sind also $a_{i,3} = a_{i,2} + a_{i,1} = 2 a_{i,1} = 4$ wobei $a_{i,1}$ die kosten sind um das $i$-te mal $1$ zu addieren.
+}
+}
+\loes{4}{
+\teil{a}{
+    
+}
+}
+
+
+\end{document}
