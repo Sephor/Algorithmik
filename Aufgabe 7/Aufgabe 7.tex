@@ -94,6 +94,28 @@ Potsdam\\
     \spliteq{
         T(n) = \sum_{i=1}^n t_i \leq \sum_{i=1}^n a_i
     }
+    Angenommen die $i$-te Operation muss $k_i$ Elemente kopieren. Dann sind die tatsächlihen Kosten $t_i = k_i + 1$ weil auch noch das neue Element geschrieben werden muss. Wenn aber ein neues, doppelt so großes Array angelegt wird dann wird auch das Potential um $k_i$ kleiner, da dann $c_i = \frac{|A_i|}{2} \rfloor$ (die Elemente passen jetzt alle in die linke Hälfte des Array). Für Das Potential gilt:\\
+    \spliteq{
+        &\Phi(i) \leq \Phi(i-1) + 1 - k_i \\
+        \Leftrightarrow & \Delta \Phi(i) \leq 1 - k_i
+    }
+    Die amorisiertn Kosten sind damit\\
+    \spliteq{
+        a_i & = t_i + \Delta \Phi(i)\\
+            & \leq k_i + 1 + 1 - k_i\\
+            & = 2
+    }
+    und für die Gesamtkosten gilt damit
+    \spliteq{
+        T(n) \leq \sum_{i=1}^n a_i \leq 2n \in \mathcal{O}(n)
+    }
+}
+\teil{b}{
+    Wenn $2^k$ viele Elemente eingefügt wurden, dann braucht das Einfügen  $e = 2^k c_c + c_e$ Kosten, wobei $c_c$ die Kosten zum kopieren und $c_e$ die zum einfügen sind. Wnn man dannach gleich wieder löscht, dann sind die Kosten $l = 2^k c_c + c_d$ wobei $c_d$ die kosten zum Löschen sind. Wenn $t_i$ die kosten für das $i$-te Einfügen sind, dann sind die Kosten genau dann maximal wenn\\
+    \spliteq{
+        T_n(k)=\sum_{i=1}^{2^k} t_i + \frac{(n-2^k)}{2} (e + l)
+    }
+    maximal ist. Wenn man $k$ findet dann ist die Sequenz $2^k$ mal append gefolgt von $ \frac{(n-2^k)}{2}$ mal append und removeLast abgewechselt. \footnote{Irgendwas muss ich übersehen haben, das es einfacher macht}
 }
 }
 
