@@ -149,7 +149,13 @@ Oder: Der $k$-te Teilnehmer muss die Paddelzeit all seine Vorgänger abwarten un
 }
 \loes{4}{
 \teil{a}{
-
+  \spliteq{
+    k = 2 & \\
+    n = 2 & \\
+    w(1) = 1, &\ g(1) = 0.1\\
+    w(2) = 10, &\ g(2) = 2
+  }
+  Algorithmus \textbf{(1)} wählt nur Geschenk 1 $\Rightarrow ALG_1 = 1$, Algorithmus \textbf{(2)} wählt nur Geschenk 2 $\Rightarrow ALG_2 = 10$.
 }
 \teil{b}{
   \bew{$\frac{OPT}{ALG_1}$ kann beliebig groß werden.}{
@@ -159,12 +165,27 @@ Oder: Der $k$-te Teilnehmer muss die Paddelzeit all seine Vorgänger abwarten un
     Sei $e(i)$ die effizienz (Wert pro Gewicht) des $i$-ten Geschenkes.\\
     Aus den gegebenen Angaben lässt sich die Effizienz der ersten beiden Geschenke bestimmen als $e(1) = 2 \frac{x}{k}$, $e(2) = \frac{x}{k}$. Offensichtlich ist die Effizienz des ersten Geschenkes höher als die des Zweiten. Der Algorithmus wählt also zuerst Geschenk 1. Da $g(1) = \frac{k}{2x} > 0$ und $g(2) = k$ Lädt der Algorithmus nur das Geschenk 1 auf den Schlitten. $ALG_1$ ist damit $1$. Es gibt aber immer nur eine alternative Lösung $SubOPT = x$ die nur das zweite Geschenk wählt.\\
     \spliteq{
-      & ALG_1 = 1 \Rightarrow \frac{OPT}{ALG_1} = OPT \geq SubOPT = x\\
+      ALG_1 = 1 \Rightarrow & \frac{OPT}{ALG_1} = OPT \geq SubOPT = x\\
       \Rightarrow & \frac{OPT}{ALG_1} \geq x
     }
     Da $x$ beliebig groß gewählt werden kann, kann auch $\frac{OPT}{ALG_1}$ beliebig groß werden.
-
   }
+}
+\teil{c}{
+  \bew{$\frac{OPT}{ALG_2}$ kann beliebig groß werden.}{
+    Sei $k>0$ beliebig, fest, sei $n=3$.\\
+    Wähle die Geschenke so, dass für ein beliebiges $x>0$ folgendes gilt:\\
+    $w(1) = 1,\ g(1) = \frac{k}{3x},\ w(2) = 4x,\ g(2) = 2k,\ g(3) = k,\ w(3) = x$.\\
+    Für die Effizienz der Geschenke gilt:\\
+    $e(1) = 3 \frac{x}{k},\ e(2) = 2 \frac{x}{k},\ e(3) = \frac{x}{k}$\\
+    Die Geschenkmenge $S={1}$, das erste Geschenk was nicht gewählt werden kann ist $x=2$. Da $x$ den Schlitten überlädt wählt der Algorithmus $S \Rightarrow ALG_2 = w(1) = 1$. Eine alternative Lösung $SubOPT$ wäre nur das Geschenk 3 $\Rightarrow SubOPT = w(3) = x$.\\
+    \spliteq{
+      ALG_2 = 1 \Rightarrow & \frac{OPT}{ALG_2} = OPT \geq SubOPT = x\\
+      \Rightarrow & \frac{OPT}{ALG_2} \geq x
+    }
+    Da $x$ beliebig groß gewählt werden kann, kann auch $\frac{OPT}{ALG_2}$ beliebig groß werden.
+  }
+  Das lößt zwar die Aufgabe nicht, zeigt aber das die Aufgabe auch nicht lösbar ist.
 }
 }
 
