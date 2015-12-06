@@ -1,0 +1,171 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 8
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{1}{
+  \textbf{Algorithmus:}\\
+  \begin{algorithm}
+    \floatname{algorithm}{Tiefe}
+    \caption{~}
+    \textbf{Input: }$n$ Zeitintervalle mit Start- und Endzeitpunkten\\
+    \textbf{Output: }Tiefe $d$
+    \begin{algorithmic}[1]
+      \STATE $Z \leftarrow$ alle Zeitpunkte als Zahl, mit markierung ob sie Start- oder Endzeiten sind.
+      \STATE Sortiere $Z$ aufsteigend nach Zeitpunkt
+      \STATE $max \leftarrow 0$
+      \STATE $current \leftarrow 0$
+      \FOR{$zeitpunkt$ \textbf{in} $Z$}
+        \IF{$zeitpunkt$ ist Startzeit}
+          \STATE $current++$
+        \ELSE
+          \STATE $current--$
+        \ENDIF
+        \IF{$current>max$}
+          \STATE $max \leftarrow current$
+        \ENDIF
+      \ENDFOR
+      \RETURN max
+    \end{algorithmic}
+  \end{algorithm}\\
+  \textbf{Laufzeit:}\\
+  Alle Operationen in der Schleife haben konstante Laufzeit, und die Schleife läuft $2n$ mal (es gibt insgesamt $2n$ Zeitpunkte). Insgesamt hat die Schleife eine Laufzeit von $\mathcal{O}(n)$. Das Initialisieren von $Z$ braucht hat ebenfalls eine Laufzeit von $\mathcal{O}(n)$. Zeile 3 und 4 haben jeweils eine $\mathcal{O}(1)$ Laufzeit. Das Sortieren in Zeile 2 braucht $\mathcal{O}(n \log n)$. Die gesamtlaufzeit ist damit $\mathcal{O}(n \log n)$.
+}
+
+\loes{2}{
+\teil{a}{
+  \spliteq{
+    d(1) = 3, &\ t(1) = 1\\
+    d(2) = 2, &\ t(2) = 2
+  }
+  $d(i)$ sei die Deadline, $t(i)$ die benötigte Zeit des $i$-ten Jobs.\\
+  Lösung des Algorithmus: 1, 2\\
+  $\hookrightarrow$ Maximale Überschreitung der Deadline von 1 (Job 2 wird bei $t=3$ fertig).\\
+  Optimale Lösung: 2, 1\\
+  $\hookrightarrow$ Keine Deadine wird verletzt.\\
+}
+\teil{b}{
+  \spliteq{
+    d(1) = 4, &\ t(1) = 3 \Rightarrow s(1) = 1\\
+    d(2) = 3, &\ t(2) = 1 \Rightarrow s(2) = 2
+  }
+  $s(i)$ist die Slack-time vom $i$-ten Job.\\
+  Lösung des Algorithmus: 1, 2\\
+  $\hookrightarrow$ Maximale Überschreitung der Deadline von 1. (Job 2 wird bei $t=4$ fertig)\\
+  Optimale Lösung: 2, 1\\
+  $\hookrightarrow$ Keine Deadine wird verletzt.\\
+}
+}
+\loes{3}{
+\textbf{Beobachtung:}\\
+Wenn die Teilnehmer in der Reihnfolge $\sigma=1, 2, 3, ..., n$ starten dann lässt sich die Gesamtzeit berechnen mit:\\
+\spliteq{
+  T(\sigma) = \max \left\{ \sum_{i=1}^k p_i + r_k | 1 \leq k \leq n \right\}
+}
+Oder: Der $k$-te Teilnehmer muss die Paddelzeit all seine Vorgänger abwarten und dann noch selbst paddeln und ins Ziel radeln.
+\teil{a}{
+  Zu Strategie \textbf{(1)}:\\
+  $n = 2$
+  \spliteq{
+    p_1 = 3, &\ r_1 = 1 \Rightarrow t_1 = 4\\
+    p_2 = 1, &\ r_2 = 2 \Rightarrow t_2 = 3
+  }
+  Lösung des Algorithmus: $\sigma = 1, 2$\\
+  $\hookrightarrow T(\sigma) = \max \left\{ 6, 4 \right\} = 6$\\
+  Optimale Lösung: $\sigma = 2, 1$\\
+  $\hookrightarrow T(\sigma) = \max \left\{ 5, 3 \right\} = 5$\\
+  \\
+  Zu Strategie \textbf{(2)}:\\
+  $n = 2$
+  \spliteq{
+    p_1 = 1, &\ r_1 = 1\\
+    p_2 = 2, &\ r_2 = 2
+  }
+  Lösung des Algorithmus: $\sigma = 1, 2$\\
+  $\hookrightarrow T(\sigma) = \max \left\{ 5, 2 \right\} = 5$\\
+  Optimale Lösung: $\sigma = 2, 1$\\
+  $\hookrightarrow T(\sigma) = \max \left\{ 4, 4 \right\} = 4$
+}
+}
+\loes{4}{
+\teil{a}{
+
+}
+\teil{b}{
+  \bew{$\frac{OPT}{ALG_1}$ kann beliebig groß werden.}{
+    Sei $k>0$ beliebig, fest, sei $n=2$.\\
+    Wähle die Geschenke so, dass für ein beliebiges $x>0$ folgendes gilt:\\
+    $w(1) = 1,\ g(2) = k,\ w(2) = x,\ g(1) = \frac{k}{2x}$.\\
+    Sei $e(i)$ die effizienz (Wert pro Gewicht) des $i$-ten Geschenkes.\\
+    Aus den gegebenen Angaben lässt sich die Effizienz der ersten beiden Geschenke bestimmen als $e(1) = 2 \frac{x}{k}$, $e(2) = \frac{x}{k}$. Offensichtlich ist die Effizienz des ersten Geschenkes höher als die des Zweiten. Der Algorithmus wählt also zuerst Geschenk 1. Da $g(1) = \frac{k}{2x} > 0$ und $g(2) = k$ Lädt der Algorithmus nur das Geschenk 1 auf den Schlitten. $ALG_1$ ist damit $1$. Es gibt aber immer nur eine alternative Lösung $SubOPT = x$ die nur das zweite Geschenk wählt.\\
+    \spliteq{
+      & ALG_1 = 1 \Rightarrow \frac{OPT}{ALG_1} = OPT \geq SubOPT = x\\
+      \Rightarrow & \frac{OPT}{ALG_1} \geq x
+    }
+    Da $x$ beliebig groß gewählt werden kann, kann auch $\frac{OPT}{ALG_1}$ beliebig groß werden.
+
+  }
+}
+}
+
+\end{document}
