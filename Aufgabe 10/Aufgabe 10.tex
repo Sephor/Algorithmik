@@ -1,0 +1,152 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 10
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{1}{
+  Das Rentier sollte zuerst 1 Meter nach links laufen. Dann sollte es 2 Meter wieder nach rechts laufen, dann 4 Meter nach links, dann 8 nach rechts, etc. Also nachdem es k Meter in eine Richtung gelaufen ist sollte es 2k Meter in die Aandere laufen. Dadurch entdeckt es immer zur Hälfte der zurückgelegten Strecke neue Zaunstücke, muss also ein $\mathcal{O}(n)$ Meter zurücklegen bevor es das Loch findet.
+}
+
+\loes{2}{
+\teil{a}{
+  \begin{algorithm}
+    \floatname{algorithm}{Veranstaltungsplan}
+    \caption{~}
+    \textbf{Input: }Liste der Leistungspunkte $l$, Liste der Schwierigkeitsgrade $w$, minimale LP $c$\\
+    \textbf{Output: }Liste zu belegener Veranstaltungen
+    \begin{algorithmic}[1]
+      \STATE $Plaene \leftarrow$ Liste der Zahlen von $1$ bis $n$
+      \STATE $Plaene \leftarrow$ Potenzmenge von $Plaene$
+      \STATE $minWork \leftarrow +inf$
+      \STATE $best \leftarrow$ leere Liste
+      \FORALL{$plan$ in $Plaene$}
+        \STATE $work \leftarrow 0$
+        \STATE $lp \leftarrow 0$
+        \FORALL{$i$ in $plan$}
+          \STATE $lp \leftarrow lp + l_i$
+          \STATE $work \leftarrow work + w_i$
+          \IF{$work < minWork$}
+            \STATE $minWork \leftarrow work$
+            \STATE $best \leftarrow plan$
+          \ENDIF
+        \ENDFOR
+      \ENDFOR
+      \RETURN $best$
+    \end{algorithmic}
+  \end{algorithm}\\
+  \textbf{Laufzeit:}\\
+  Die Potenzmenge hat die Größe $2^n$, mit jeweils maximal $n$ Elementen braucht also $\Theta(n2^n)$ um erstellt zu werden. Die Äußere Schleife Itteriert über $2^n$ Elemente, und die innere über $n$. Die Schleifen brauchen also auch $\Theta(n2^n)$. Der gesamte Algorithmus hat also eine Laufzeit von $\Theta(n2^n)$.
+}
+\teil{b}{
+  Induktiver Ansatz:\\
+  \spliteq{
+    best(i, c) = min(best(i-1,c),best(i-1,c-l_i)+w_i)
+  }
+  wobei $best(i,c)$ der beste Studienplan für die ersten $i$ Veranstaltungen mit zu erreichenden Leistungspunkten $c$ ist.\\
+  \begin{algorithm}
+    \floatname{algorithm}{Studienplan}
+    \caption{~}
+    \textbf{Input: }Liste der Leistungspunkte $l$, Liste der Schwierigkeitsgrade $w$, minimale LP $c$\\
+    \textbf{Output: }Studienplan
+    \begin{algorithmic}[1]
+      \STATE $T \leftarrow$ Tabelle mit $n$ Zeilen und $l_{max}$ Spalten, gefüllt mit $+inf$
+      \STATE Für alle Spalten kleiner als $l_0$ Fülle erste Zeile mit $w_0$
+      \FOR{$j=1$ \TO $n$} \DO
+        \FOR{$i=0$ \TO $l_{max}$} \DO
+          \STATE $T[j][i] \leftarrow min(T[j][i-1], T[j-l_i][i-1] + w_i)$
+        \ENDFOR
+      \ENDFOR
+    \end{algorithmic}
+  \end{algorithm}\\
+  $T[j][i]$ Sei die i-te Spalte und j-te Zeile in der Tabelle T. Falls $i<0$ dann sei der Wert 0.\\
+  Den Studienplan ermittelt man wie in e) beschrieben.\\
+  \textbf{Laufzeit:}\\
+  Da für jede Zelle nur Konstante Laufzeit benötigt wird wird insgeanmt eine Laufzeit von $\mathcal{O}(n*l_{max})$ (anzahl Zellen) benötigt. Das überschreitet die geforderten Kosten nicht.
+}
+\teil{c}{
+  Entferne zunächst die Pflichtveranstaltungen aus den Listen und ziehe die Summe der Leistungspunkte von $c$ ab. Fahre dann wie in b) fort. Zum Schluss müssen die Pflichtveranstaltungen noch dem Plan hinzugefügt werden.
+}
+\teil{d}{}
+\teil{e}{
+  Man finde das Feld mit dem kleinsten Wert, welches rechts von Spalte $c$ steht. Dann muss man den "Pfad" zu diesem Feld zurückverfolgen. Dazu fängt man in diesem Feld an und geht jeweils für ein Feld $(i,j)$ wie folgt vor:\\
+  Falls Das darüberliegende Feld $(i-1,j)$ den Gleichen Wert hat nimmt man Veranstaltung $i$ nicht mit in den Plan und springt zu Feld $(i-1,j)$. Falls das darüberliegende Feld größer ist, springt man zu dem Feld $(i-1,j-l_i)$ und nimmt die Veranstaltung mit auf.\\
+  Dies wiederholt man bis man bei der obersten Zeile oder der linkesten Spalte angelangt ist.
+}
+}
+
+\loes{3}{
+\teil{a, b}{ siehe c)}
+\teil{c}{
+  Man ordne jeder Farbe folgendermaßen eine Zahl zu:\\
+  rot $\rightarrow 0$\\
+  grün $\rightarrow 1$\\
+  blau $\rightarrow 2$\\
+  Im folgenden werde ich die Zahlen stellvertretend für die Farben verwenden.\\
+  Der erste Elf errechnet sich die Farbe die er sagt indem er die Summe aller Farben seiner Vorderelfen bestimmt und modulo 3 rechnet. Diese Farbe sei $a \in \{0,1,2\}$.\\
+  Der nächste Elf errechnet dann die Summe $S$ all seiner Vorgänger modulo 3. Dann bestimmt er $|a - S|$ mod $3$, welches die Farbe seiner mütze ist und nennt diese.\\
+  Alle anderen Elfen erechnen $S$ als die Summe aller genannten Farben (ohne $a$) plus die Summe aller ihrer Vorderelfen, modulo 3. Ihre eigenen Mützenfarben können sie auch wieder mit $|a - S|$ mod $3$ berechnen.\\
+  Mit dieser Strategie bekommen alle bis auf den hintersten Elfen garantiert ein Geschenk.
+}
+}
+
+
+\end{document}
