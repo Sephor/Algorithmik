@@ -1,0 +1,114 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 11
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{1}{
+  
+}
+
+\loes{2}{
+  \teil{a}{
+    \textbf{Preorder:} 37, 29, 23, 17, 28, 31, 46, 42, 40, 41, 47, 49\\
+    \textbf{Inorder:} 17, 23, 28, 29, 31, 37, 40, 41, 42, 46, 47, 49\\
+    \textbf{Postorder:} 17, 28, 23, 31, 29, 41, 40, 42, 49, 47, 46, 37\\
+  }
+  \teil{b}{
+    Jeder Knoten und jeder Null Knoten wird genau ein mal als Parameter übergeben. Die kosten in jedem Rekursionsschritt sind dabei konstant. Die Laufzeit lässt sich folglich mit $\Theta(n)$ abschätzen.
+  }
+  \teil{c}{
+    \bew{Die Schlüssel von T werden sortiert ausgegeben}{
+      Für jeden Schlüssel $n$ werden zuerst alle Schlüssel des linken Teilbaumes, dann $n$ und dann alle Schlüssel des rechten Teilbaumes ausgegeben. Da per Definition alle schlüssel im linken Teilbaum kleiner sind und alle schlüssel im rechten Teilbaum größer sind gilt das $n$ hinsichtlich seiner Teilbäume sortiert ist.\\
+      Da dies für alle Schlüssel $n$ gilt und '<' transitiv ist, ist die Ausgabe sortiert.
+    }
+  }
+}
+\loes{3}{
+  \bew{Jeder gerichtete Binärbaum mit $k$ Knoten hat genau $k+1$ viee Kinder-null-Zeiger (KnZ).}{
+    \textbf{Indunktionsanfang:}\\
+    Ein Baum min $k=1$ Knoten hat $2=k+1$ KnZ.
+    \textbf{Induktionsannahme:}\\
+    Die Aussage gilt für festes $k$.
+    \textbf{Indunktionsschritt:}\\
+    Jeder Baum mit $k+1$ Knoten kann aus einem Baum mit $k$ Knoten durch das Anfügen eines Knoten erstellt werden. Um ein Knoten anzufügen muss ein KnZ entfernt werden. An dem neuen Knoten entstehen zwei neue KnZ. Die Anzahl der KnZ bei dem neuen Baum (mit $k+1$ Knoten) ist also: $(k+1)-1+2=k+2$. Die Aussage gilt also für einen Baum mit $k+1$ Knoten.\\
+    Wenn man annimmt, dass ein Leerer Baum einen KnZ hat gilt die Aussage damit für alle k.
+  }
+}
+\loes{4}{
+  \teil{a}{
+    Man sortiere $A$ aufsteigend. Aus dem sortierten Array ließt man wie folgt rekursiv einen Baum ab:\\
+    Für das Teilarray von $n$ bis $m$ ist $\lceil \frac{m-n}{2} \rceil$ der Wurzelknoten, das Teilarray $n$ bis $\lceil \frac{m-n}{2} \rceil - 1$ der linke Teilbaum und das Teilarray $\lceil \frac{m-n}{2} \rceil + 1$ bis $m$ der rechte Teilbaum. Der gesamte Baum ist das Teilarray von $1$ bis $n$.\\
+    Die Höhe des Baums ist $\mathcall{O}(\log n)$ da nach interpretation des Arrays der linke Teilbaum immer höchstens um $1$ höher als der linke ist.\\
+    Die Laufzeit ist $\mathcal{O}(n \log n)$, da Sortieren der einzige Schritt des Algorithmus ist. Man könnte natürlich alle Schlüssel noch naheinander in einen Baum einfügen der nach dem genannten Schema aufgebaut ist, dies würde in $\mathcal{o}(n \log n)$ gehen.
+  }
+  \teil{b}{
+    \bew{Es gibt keinen Algorithmus, welcher in $\matchcal{o}(n \log n)$ Schritten einen Suchbaum konstruiert}{
+      Angenommen es gibt einen solchen Algorithmus $A$, dann könnten man erst $A$ und dann Inorder ausführen. Dies würde die Schlüssel in sortierter Reihnfolge ausgeben. Die Laufzeit wäre $\mathcal{o}(n \log n) + \Theta(n) \in \mathcal{o}(n \log n)$. Dies verletzt die untere Schranke des Sortierens.\\
+      Da die Annahme zum Widerspruch führt, kann es keinen solchen Algorithmus geben.
+    }
+  }
+}
+}
+
+
+
+\end{document}
