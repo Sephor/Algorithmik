@@ -1,0 +1,64 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{algpseudocode} 
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\usepackage{pdfpages}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\ {#2}}\vspace{0.5cm}}
+
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Michael Fabian}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+ \huge \bf Lösung zu Übungsblatt 11
+\end{center}
+
+
+\loes{5a)}
+{
+(Jeder Schritt ist auf einer Extraseite)
+\includepdf[pages=1-6]{trees.pdf}
+}
+\loes{5b)}
+{
+\includepdf[pages=7]{trees.pdf}
+}
+\end{document}
+
