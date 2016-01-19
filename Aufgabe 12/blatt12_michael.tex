@@ -1,0 +1,150 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+\usepackage{listings}
+%%\usepackage{algpseudocode} 
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\usepackage{pdfpages}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\ {#2}}\vspace{0.5cm}}
+
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Michael Fabian}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+ \huge \bf Lösung zu Übungsblatt 12
+\end{center}
+
+\loes{1a)}
+{
+Beweis über Gegenbeweis: Angenommen, es gibt einen zweiten Knoten $K_2$ (zusätzlich zu $K_1$, der ein absoluter Gewinner ist. Dann muss es eine Kante von $K_1$ nach $K_2$ geben und eine weitere Kante von $K_2$ nach $K_1$ (da beide gegen den jeweils anderen verloren haben müssen). Dies widerspricht jedoch der Aufgabenstellung. Damit gilt die Gegenaussage $\square$
+}
+
+\loes{1b)}
+{}
+
+\lstset{numbers=left, language=C, otherkeywords={*,return}}
+Input: Adjazenzliste A \\
+Output: Boolean (absoluter Gewinner existiert) \\
+\begin{lstlisting}
+for(int i=0;i<A.length;++i)
+{
+	if A[i] leer ist
+		return true;
+}
+return false;
+\end{lstlisting}
+
+\loes{1c)}
+{}
+
+\lstset{numbers=left, language=C, otherkeywords={*,return}}
+Input: Adjazenzmatrix M \\
+Output: Boolean (absoluter Gewinner existiert) \\
+\begin{lstlisting}
+int idx = 0;
+abort = false;
+while(idx < M.length-1 && !abort)
+{
+	abort=true;
+	for(int i=idx+1;i<M.length;++i)
+	{	
+		if(M[idx,i] == 1)
+		{
+			idx = i;
+			abort = false;
+			break;
+		}
+	}
+}
+for(int i=0;i<M.length;++i)
+{
+	if(A[idx,i] == 1)
+		return false;
+}
+return true;
+\end{lstlisting}
+
+\loes{2}
+{}
+Annahme: Listen speichern Anzahl Elemente im size-Attribut. \\
+Input: Adjazenliste A \\
+Output: Liste mit allen Pfaden \\
+\begin{lstlisting}
+Liste<Pfade> main(Adjazenzliste A)
+{
+	Initialisiere dynamische Liste "paths" als leere Liste von Paths
+	Node start
+	foreach (Node k in A)
+	{
+		if(k.size == 1)
+			start = k
+	}
+	
+	search(A,paths,{start})
+	int longest = max(paths)
+	foreach(Path p in paths)
+	{
+		if p.size != longest)
+			paths.remove(p)	
+	} 
+	return paths;
+}
+
+search(Adjazenzliste A, ref Liste<Pfade> toReturn, Path current)
+{
+	foreach(Node k in A[current.last])
+	{
+		if(k == current[current.last-1])
+			continue
+			
+		if(k.size == 1)
+			toReturn.add(current + k);
+		else
+			search(A,toReturn,current+k,current.last);	
+	}
+}
+\end{lstlisting}
+
+Der Algorithmus sucht zunächst einen Knoten mit nur einer Kante. Dieser muss ein Endpunkt des Graphen sein. Von diesem ausgehend wird anschließend rekursiv jeder Pfad traversiert. Da es keine Zyklen gibt wird jeder Knoten (jeder Pfad) nur einmal durchlaufen. Sobald ein Pfad bei einem Endknoten (also einem Knoten mit nur einer Kante) angelangt, wird er in die Liste mit möglichen Pfaden eingetragen. Sobald alle Pfade traversiert wurden, wird die maximale Pfadlänge ermittelt und Pfade mit einer geringeren Länge entfernt. \\
+Korrektheit: Es werden alle möglichen Pfade vollständig traversiert. Nach der Längenüberprüfung sind garantiert nur noch die längsten Pfade in der zurückgegebenen Liste enthalten. Der Algorithmus ist damit korrekt. \\
+Laufzeit: Z. 3,4 konstant. Durchsuchen aller Knoten maximal n Schritte, Z.7 konstant bei Adjazenzliste (wenn Annahme gilt, dass die Größe als Attribut gespeichert wird), Z8 konstant, damit Z.5 in $O(n)$. Z.11 wird genau (n-1)-mal rekursiv aufgerufen, da es keine Zyklen gibt. Z.23 kann daher nur für maximal 2n Kanten insgesamt aufgerufen werden (alle Rekursionen zusammengerechnet, alle Zielknoten zusammen + die Überprüfung, ob man von dem Knoten kommt, für eine Rekursion betrachtet ist der Wert irrelevant). Z25,28,29 konstant. Gesamtkosten konstant, search liegt damit in $O(1)$. Damit ist der Gesamtalgorithmus $O(n)$. 
+
+algorithmus von kruskal
+
+\end{document}
