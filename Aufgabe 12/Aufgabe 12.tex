@@ -1,0 +1,107 @@
+\documentclass{scrartcl}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{hyperref}
+%%\usepackage{algpseudocode}
+\renewcommand*\thealgorithm{}
+\usepackage{algorithmic}
+\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,
+right=27mm,head=14.5pt}
+
+
+\renewcommand{\labelenumi}{\alph{enumi})}
+\setlength{\parindent}{0mm}
+
+\DeclareMathOperator{\rev}{rev}
+
+\newcommand{\loes}[2]{\vspace{0.5cm}\\\medskip\noindent{{\bf Lösung zu Aufgabe #1}\\
+{#2}}}
+\newcommand{\teil}[2]{\vspace{0.3cm}\\\medskip\noindent{{\bf#1)}\\
+{#2}}}
+\newcommand{\bew}[2]{
+{\textbf{\textit{ZZ.}} }{#1}\\
+{\begin{proof}[{\textbf{\textit{Beweis}}}] {#2} \end{proof}}}
+\newcommand{\spliteq}[1]{
+    \begin{equation}
+    \begin{split}
+    {#1}
+    \end{split}
+    \end{equation}
+}
+
+
+\begin{document}
+\pagestyle{plain}
+
+
+\noindent
+\begin{minipage}{0.66\textwidth}
+Übungen zur Vorlesung\\
+Einführung in die Algorithmik WS 15/16\\
+~\\
+%%%%%%%%%%%%%%%%%% HIER NAME EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Moritz Eissenhauer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{minipage}
+~
+\begin{minipage}{0.30\textwidth}
+Hasso-Plattner-Institut\\
+Potsdam\\
+\today
+\end{minipage}
+
+
+\begin{center}
+%%%%%%%%%%%%%%%%%% HIER NUMMER EINTRAGEN! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \huge \bf Lösung zu Übungsblatt 12
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{center}
+
+\loes{1}{
+\teil{a}{
+  \bew{Es gibt höchstens einen \textit{absoluten Gewinner} (aG).}{
+    Annahme: Seien $a, b \in V$ zwei aG in $G_{EM}$.\\
+    Da $a$ und $b$ gegeneinander angetreten haben muss eine Kante $e \in E$ existieren, welche $a$ und $b$ verbindet. $e$ muss aber entweder $(a, b)$ oder $(b, a)$ sein. Beide Fälle stehen im widerspruch zur Annahme.\\
+    $\Rightarrow$ Es kann keine zwei (und damit auch nicht mehr) aG geben.
+  }
+}
+\teil{b}{
+  Eine Mannschaft ist genau dann der aG wenn ihre Adjazenzliste leer ist.\\
+  Man brauch also lediglich über alle Manschaften itterieren und prüfen ob ihre Adjazenzlisten leer sind. Iste eine liste leer so gibt man die zugehöhrige Mannschaft aus.\\
+  Die Laufzeit um eine liste auf Leerheit zu prüfen ist konstant, da man dies für jede Mannschaft machen muss ist die Gesamtlaufzeit $\in \mathcal{O}(n)$.
+}
+}
+
+\loes{2}{
+\begin{algorithm}
+  \floatname{algorithm}{longest}
+  \caption{~}
+  \textbf{Input: }Adjazenzliste des Baumes\\
+  \textbf{Output: }Endpunkte eines längsten Pfades
+  \begin{algorithmic}[1]
+    \STATE $s \leftarrow$ beliebiger Knoten aus Baum
+    \STATE $a \leftarrow$ letzter Knoten bei Breitensuche mit Start $s$
+    \STATE $b \leftarrow$ letzter Knoten bei Breitensuche mit Start $a$
+    \RETURN $a, b$
+  \end{algorithmic}
+\end{algorithm}\\
+\textbf{Korrektheit:}\\
+  $a$ ist der von $s$ am weitesten entfernte Knoten. Es sind zwei Fälle zu unterscheiden:\\
+  \textbf{Fall 1:} $s$ liegt auf einem längsten Pfad\\
+  $a$ muss dadurch Startpunkt (oder Endpunkt) eines längsten Pfades sein. Falls es einen längsten Pfad gibt, der bei $x \neq a$ startet, bei $y \neq a$ endet und über $s$ geht, dann gibt es auch den Pfad der bei $a$ startet und über $s$ bei $y$ oder $x$ endet. Dieser ist aber auch ein längster Pfad, da der Pfad von $a$ nach $s$ mindestens so lang ist wie der von $x$ nach $s$ bzw. der von $s$ nach $y$.\\
+  Da es einen längsten Pfad gibt der bei $a$ startet und der Pfad $a$ nach $b$ der längste Pfad ist der bei $a$ startet mus dies auch ein längster Pfad im Baum sein.\\
+  \textbf{Fall 2:} $s$ liegt nicht auf einem längsten Pfad\\
+  ... hier fehlt mir der Ansatz.
+  \\
+  \textbf{Laufzeit:}\\
+  Sei $n$ die Anzahl der Knoten und $m$ die der Kanten. Für einen Baum gilt $m = n - 1$. Die Laufzeit der Breitensuche ist damit $\in \Theta(n)$. Die Gesamtlaufzeit ist folglich $\in \mathcal{O}(n)$.
+}
+
+
+\end{document}

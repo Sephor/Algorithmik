@@ -63,7 +63,23 @@ Potsdam\\
 \end{center}
 
 \loes{1}{
-  
+  \begin{algorithm}
+    \floatname{algorithm}{Trennbar}
+    \caption{~}
+    \textbf{Input: }Array $w$ mit Buchstaben
+    \textbf{Output: }Boolean der angibt ob das Wort zerlegbar ist
+    \begin{algorithmic}[1]
+      \STATE $A \leftarrow$ Array mit Länge $n + 1$
+      \STATE $A[n] \leftarrow$ True
+      \FOR{$i:=n-1$ \TO 0}
+        \FOR{$j:=0$ \TO $n-i$}
+          \STATE $A[i] \leftarrow A[i] \vee$ (Teilwort von w ab i mit Länge j ist Wort $\wedge A[i + j + 1]$)
+        \ENDFOR
+      \ENDFOR
+      \RETURN $A[0]$
+    \end{algorithmic}
+  \end{algorithm}\\
+  \textbf{Laufzeit: } Das Erstellen des Array brauch $\mathcal{O}(n)$, die beiden Schleifen laufen jeweils $\mathcal{O}(n)$ mal, die anderen Anweisungen haben konstante Laufzeit. die gesamte Laufzeit ist damit $\mathcal{O}(n^2)$.
 }
 
 \loes{2}{
@@ -98,17 +114,19 @@ Potsdam\\
     Man sortiere $A$ aufsteigend. Aus dem sortierten Array ließt man wie folgt rekursiv einen Baum ab:\\
     Für das Teilarray von $n$ bis $m$ ist $\lceil \frac{m-n}{2} \rceil$ der Wurzelknoten, das Teilarray $n$ bis $\lceil \frac{m-n}{2} \rceil - 1$ der linke Teilbaum und das Teilarray $\lceil \frac{m-n}{2} \rceil + 1$ bis $m$ der rechte Teilbaum. Der gesamte Baum ist das Teilarray von $1$ bis $n$.\\
     Die Höhe des Baums ist $\mathcall{O}(\log n)$ da nach interpretation des Arrays der linke Teilbaum immer höchstens um $1$ höher als der linke ist.\\
-    Die Laufzeit ist $\mathcal{O}(n \log n)$, da Sortieren der einzige Schritt des Algorithmus ist. Man könnte natürlich alle Schlüssel noch naheinander in einen Baum einfügen der nach dem genannten Schema aufgebaut ist, dies würde in $\mathcal{o}(n \log n)$ gehen.
+    Die Laufzeit ist $\mathcal{O}(n \log n)$, da Sortieren der einzige Schritt des Algorithmus ist. Man könnte natürlich alle Schlüssel noch naheinander in einen Baum einfügen der nach dem genannten Schema aufgebaut ist, dies würde in $o(n \log n)$ gehen.
   }
   \teil{b}{
     \bew{Es gibt keinen Algorithmus, welcher in $\matchcal{o}(n \log n)$ Schritten einen Suchbaum konstruiert}{
-      Angenommen es gibt einen solchen Algorithmus $A$, dann könnten man erst $A$ und dann Inorder ausführen. Dies würde die Schlüssel in sortierter Reihnfolge ausgeben. Die Laufzeit wäre $\mathcal{o}(n \log n) + \Theta(n) \in \mathcal{o}(n \log n)$. Dies verletzt die untere Schranke des Sortierens.\\
+      Angenommen es gibt einen solchen Algorithmus $A$, dann könnten man erst $A$ und dann Inorder ausführen. Dies würde die Schlüssel in sortierter Reihnfolge ausgeben. Die Laufzeit wäre $o(n \log n) + \Theta(n) \in o(n \log n)$. Dies verletzt die untere Schranke des Sortierens.\\
       Da die Annahme zum Widerspruch führt, kann es keinen solchen Algorithmus geben.
     }
   }
 }
 }
-
+\loes{5}{
+  In der anderen Datei. Der letzte Baum is b) die anderen a)
+}
 
 
 \end{document}
